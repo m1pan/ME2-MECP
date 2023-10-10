@@ -1,5 +1,32 @@
 import numpy as np
 import math as mt
+import matplotlib.pyplot as plt
 
+#Task A
 a = np.arange(-5,-2.5,0.5)
-b = np.arange()
+b = np.arange(-2.05,3,0.05)
+c = np.arange(3,5.5,0.5)
+x = np.concatenate((a,b,c))
+
+f = np.sin(x)
+print(f[21])
+plt.scatter(x,f)
+
+#Task B
+x = np.linspace(-2*np.pi, 2*np.pi, 41)
+y = np.linspace(-1*np.pi, 2.1*np.pi, 31)
+Nx = len(x)
+Ny = len(y)
+
+f = np.ndarray((Ny,Nx))
+for i in range(0,Ny):
+    for j in range(0,Nx):
+        f[i,j] = mt.sin(x[j]) * mt.cos(y[i])
+
+g = np.ndarray((Ny,Nx))
+for i in range(0,Ny):
+    for j in range(0,Nx):
+        g[i,j] = mt.sin(y[i]) * mt.cos(x[j])
+
+p = f * g
+print(p[10,10])
