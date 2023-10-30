@@ -138,16 +138,16 @@ for n in a:
 print(trapz(xn,yn)-trapz(xs,ys))
 
 #Task E
-def z(x,y):
-    z = 
-    for n in x:
-        for m in y:
-        z = mt.sqrt(pow(25,2)*(1-pow(x/67,2)-pow(y/56,2)))
-    return z
+# def z(x,y):
+#     z = 
+#     for n in x:
+#         for m in y:
+#         z = mt.sqrt(pow(25,2)*(1-pow(x/67,2)-pow(y/56,2)))
+#     return z
 
-h=0.5
-x = np.arange(-67,67+h,h)
-y = np.arange(-56,56+h,h)
+# h=0.5
+# x = np.arange(-67,67+h,h)
+# y = np.arange(-56,56+h,h)
 
-xx,yy = np.meshgrid(x,y)
-z = z(xx,yy)
+# xx,yy = np.meshgrid(x,y)
+# z = z(xx,yy)
