@@ -1,6 +1,7 @@
 import numpy as np
 import math as mt
 import matplotlib.pyplot as plt
+from mpl_toolkits import mplot3d
 
 #Task A
 a = np.arange(-5,-2.5,0.5)
@@ -28,5 +29,16 @@ for i in range(0,Ny):
     for j in range(0,Nx):
         g[i,j] = mt.sin(y[i]) * mt.cos(x[j])
 
+Xg,Yg = np.meshgrid(x,y)
+
 p = f * g
-print(p[10,10])
+s = f + g
+
+# task c
+ax = plt.axes(projection='3d')
+# ax.plot_surface(Xg,Yg,s)
+
+t = np.arange(0,10.05,0.05)
+r = f * np.exp(-0.5*t[100])
+plt.contour(Xg,Yg,r)
+plt.show()
