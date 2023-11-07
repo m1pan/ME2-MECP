@@ -15,36 +15,59 @@ def LagrInterp(xn,yn,x):
     '''receives sets of known yn, xn, and interpolates x'''
     order = len(xn)
     length = len(x)
-    y = []
+    y = np.empty(length)
     for i in range(length):
         tmp = 0
         for j in range(order):
             tmp += yn[j] * lagrangian(j,x[i],xn)
-        y.append(tmp)
+        y[i] = tmp
     return y
 
-x = np.arange(0,3.05,0.05)
-f = np.sin(x)
+domain = np.arange(0,3.05,0.05)
+f = np.sin(domain)
 
 xlin = np.linspace(1,2,2)
 xquad = np.linspace(1,2,3)
 xcub = np.linspace(1,2,4)
 
-linterp = LagrInterp(xlin,np.sin(xlin),x)
-quadterp = LagrInterp(xquad,np.sin(xquad),x)
-cubterp = LagrInterp(xcub,np.sin(xcub),x)
-# plt.plot(x,f)
-# plt.plot(x,quadterp,color='r')
+linterp = LagrInterp(xlin,np.sin(xlin),domain)
+quadterp = LagrInterp(xquad,np.sin(xquad),domain)
+cubterp = LagrInterp(xcub,np.sin(xcub),domain)
+# plt.plot(domain,f)
+# plt.plot(domain,quadterp,color='r')
 # plt.show()
-# print(x[16])
+# print(domain[16])
 # print(cubterp[16])
 
 '''Task B'''
 def NewtDivDiff(xn,yn):
+    '''computes value of Newton's Divided difference from lists of xn and yn'''
     size=len(yn)
     if size==1:
-        return yn
+        return yn[0]
     ynn = []
     for i in range(size-1):
         ynn.append((yn[i+1]-yn[i])/(xn[i+1+len(xn)-size]-xn[i]))
     return NewtDivDiff(xn,ynn)
+
+def NewtonInterp(xn,yn,x):
+    '''takes known xn,yn and returns interpolated y based on x'''
+    order = len(xn)
+    length = len(x)
+    y = np.empty(length)
+    for m in range(0,length):
+        tmp = yn[0]
+        for i in range(1,order):
+            div = NewtDivDiff(xn[:i],yn[:i])
+            for j in range(i-1):
+                div = div*(x[m]-x[j])
+            tmp += div
+        y[m]=tmp
+    return y
+
+newtlin = NewtonInterp(xlin,np.sin(xlin),domain)
+newtquad = NewtonInterp(xquad,np.sin(xquad),domain)
+newtcub = NewtonInterp(xcub,np.sin(xcub),domain)
+plt.plot(domain,f)
+plt.plot(domain,newtquad,color='r')
+plt.show()
