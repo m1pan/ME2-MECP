@@ -80,4 +80,6 @@ test = [1/(1+25*x**2) for x in order11]
 '''Task C'''
 def Splines(xn,yn,x,ya,yb):
     """takes known xn,yn, points to be interpolated x, and boundary conditions y'(a) and y'(b). Returns interpolated y"""
-    
+    for i in range(len(x)):
+        for j in range(len(yn)):
+            aj = 
