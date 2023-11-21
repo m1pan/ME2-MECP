@@ -59,10 +59,17 @@ def NewtonInterp(xn,yn,x):
     y = np.empty(length)
     for m in range(length):
         tmp = yn[0]
+<<<<<<< HEAD
         for i in range(0,order):
             div = NewtDivDiff(xn[:i],yn[:i])
             for j in range(i):
                 div = div*(x[m]-xn[j])
+=======
+        for i in range(1,order):
+            div = NewtDivDiff(xn[:i+1],yn[:i+1])
+            for j in range(i):
+                div *= (x[m]-xn[j])
+>>>>>>> fa4143296056e2402354844d4c1d1f8a40926869
             tmp += div
         y[m]=tmp
     return y
@@ -70,6 +77,24 @@ def NewtonInterp(xn,yn,x):
 newtlin = NewtonInterp(xlin,np.sin(xlin),domain)
 newtquad = NewtonInterp(xquad,np.sin(xquad),domain)
 newtcub = NewtonInterp(xcub,np.sin(xcub),domain)
+<<<<<<< HEAD
 plt.plot(domain,f)
 plt.plot(domain,newtlin,color='r')
 plt.show()
+=======
+
+# plt.plot(domain,f)
+# plt.plot(domain,newtquad,color='r')
+# plt.show()
+order11 = np.linspace(-1, 1, 12)
+test = [1/(1+25*x**2) for x in order11]
+# print(NewtonInterp(order11,test,[0.8]))
+
+
+'''Task C'''
+def Splines(xn,yn,x,ya,yb):
+    """takes known xn,yn, points to be interpolated x, and boundary conditions y'(a) and y'(b). Returns interpolated y"""
+    for i in range(len(x)):
+        for j in range(len(yn)):
+            aj = 
+>>>>>>> fa4143296056e2402354844d4c1d1f8a40926869
