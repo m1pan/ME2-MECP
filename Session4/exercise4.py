@@ -31,3 +31,35 @@ with open('Rocket.txt','r') as f:
     data = f.readlines()
     data = [line.strip().split() for line in data]
     data = np.array(data,dtype=float)
+
+interval = 100
+t = np.arange(0,1300+interval,interval)
+# plt.plot(t,data)
+# plt.show()
+
+# function to get kth derivative from x, y and k
+def fwddiff(x,y,k):
+    n = len(x)-1
+    h = (x[-1]-x[0])/n
+    df=np.zeros(n+1)
+    for yn in range(len(y)):
+        for i in range(k):
+            delta = ((-1)**i)*np.math.factorial(k)*y[yn+k-i-1]/(np.math.factorial(i)*np.math.factorial(k-i))
+            df[yn] = delta/(h**k)
+    return df
+
+tspline = np.linspace(0,1300,140)
+
+def splines(xn,yn,yprime,x):
+    splined = np.zeros(len(x))
+    for i in range(len(x)):
+        for j in range(len(xn)-1):
+            if x[i] >= xn[j] and x[i] <= xn[j+1]:
+                splined[i] = yn[j] + yprime[j]*(x[i]-xn[j]) + (3*(yn[j+1]-yn[j])/(xn[j+1]-xn[j])**2 - (yprime[j+1]+2*yprime[j])/(xn[j+1]-xn[j]))*(x[i]-xn[j])**2 + (-2*(yn[j+1]-yn[j])/(xn[j+1]-xn[j])**3 + (yprime[j+1]+yprime[j])/(xn[j+1]-xn[j])**2)*(x[i]-xn[j])**3
+    return splined
+
+plt.plot(tspline,splines(t,data,fwddiff(t,data,1),tspline))
+plt.plot(t,data)
+plt.show()
+
+# print(splines(t,data,fwddiff(t,data,1),tspline)[121])
