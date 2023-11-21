@@ -43,24 +43,26 @@ cubterp = LagrInterp(xcub,np.sin(xcub),domain)
 def NewtDivDiff(xn,yn):
     '''computes value of Newton's Divided difference from lists of xn and yn'''
     size=len(yn)
+    xsize = len(xn)
     if size==1:
         return yn[0]
     ynn = []
     for i in range(size-1):
-        ynn.append((yn[i+1]-yn[i])/(xn[i+1+len(xn)-size]-xn[i]))
+        ynn.append((yn[i+1]-yn[i])/(xn[i+1+xsize-size]-xn[i]))
     return NewtDivDiff(xn,ynn)
+
 
 def NewtonInterp(xn,yn,x):
     '''takes known xn,yn and returns interpolated y based on x'''
     order = len(xn)
     length = len(x)
     y = np.empty(length)
-    for m in range(0,length):
+    for m in range(length):
         tmp = yn[0]
-        for i in range(1,order):
+        for i in range(0,order):
             div = NewtDivDiff(xn[:i],yn[:i])
-            for j in range(i-1):
-                div = div*(x[m]-x[j])
+            for j in range(i):
+                div = div*(x[m]-xn[j])
             tmp += div
         y[m]=tmp
     return y
@@ -69,5 +71,5 @@ newtlin = NewtonInterp(xlin,np.sin(xlin),domain)
 newtquad = NewtonInterp(xquad,np.sin(xquad),domain)
 newtcub = NewtonInterp(xcub,np.sin(xcub),domain)
 plt.plot(domain,f)
-plt.plot(domain,newtquad,color='r')
+plt.plot(domain,newtlin,color='r')
 plt.show()
