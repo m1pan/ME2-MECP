@@ -8,8 +8,8 @@ def Simpson(x,y):
     h = (b-a) / n
     return (h / 3) * (y[0] + 4 * np.sum(y[1:-1:2]) + 2 * np.sum(y[2:-1:2]) + y[-1])
 
-x = np.arange(0,2.01,0.01)
-y = np.power(4,x-1)
+# x = np.arange(0,2.01,0.01)
+# y = np.power(4,x-1)
 # print(Simpson(x,y))
 
 def Simpson2(f,a,b,e):
@@ -42,10 +42,10 @@ def fwddiff(x,y,k):
     n = len(x)-1
     h = (x[-1]-x[0])/n
     df=np.zeros(n+1)
-    for yn in range(len(y)):
-        for i in range(k):
-            delta = ((-1)**i)*np.math.factorial(k)*y[yn+k-i-1]/(np.math.factorial(i)*np.math.factorial(k-i))
-            df[yn] = delta/(h**k)
+    for yn in range(n-k+1):
+        for i in range(k+1):
+            delta = ((-1)**i)*np.math.factorial(k)*y[yn+k-i]/(np.math.factorial(i)*np.math.factorial(k-i))
+            df[yn] += delta/(h**k)
     return df
 
 tspline = np.linspace(0,1300,140)
@@ -58,8 +58,9 @@ def splines(xn,yn,yprime,x):
                 splined[i] = yn[j] + yprime[j]*(x[i]-xn[j]) + (3*(yn[j+1]-yn[j])/(xn[j+1]-xn[j])**2 - (yprime[j+1]+2*yprime[j])/(xn[j+1]-xn[j]))*(x[i]-xn[j])**2 + (-2*(yn[j+1]-yn[j])/(xn[j+1]-xn[j])**3 + (yprime[j+1]+yprime[j])/(xn[j+1]-xn[j])**2)*(x[i]-xn[j])**3
     return splined
 
+
 plt.plot(tspline,splines(t,data,fwddiff(t,data,1),tspline))
 plt.plot(t,data)
 plt.show()
 
-# print(splines(t,data,fwddiff(t,data,1),tspline)[121])
+print(fwddiff(tspline,splines(t,data,fwddiff(t,data,1),tspline),1)[121])
