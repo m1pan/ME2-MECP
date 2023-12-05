@@ -1,6 +1,8 @@
 import numpy as np
 import matplotlib.pyplot as plt
 
+
+# Task A
 # define a differential equation
 def func(y,t):
     return -2*y*t-3*t**3
@@ -45,7 +47,7 @@ def BwEuler(t0,y0,tend,h):
     y[0] = y0
     for i in range(len(t)-1):
         y[i+1] = (y[i]-2*h*t[i+1]**3)/(1+2*h*t[i+1])
-    return t,y #somehow this function does not work
+    return t,y 
 
 
 # print(FwdEuler(0,800,1,0.1)[1][-1])
@@ -56,6 +58,8 @@ def BwEuler(t0,y0,tend,h):
 # plt.plot(BwEuler(0,-10,100,0.1)[0],BwEuler(0,-10,100,0.1)[1],label='Backward Euler')
 # plt.show()
 
+
+# Task C
 # define a forward euler function to solve a system of ODEs
 def FwEulerN(t0,tend,y0,h):
     t = np.arange(t0,tend+h,h)
@@ -70,3 +74,6 @@ def housemarket(y):
     yn[0]=0.3*y[0]*y[1]-0.8*y[0]
     yn[1]=2.2*y[1]-y[0]*y[1]
     return yn
+
+
+
