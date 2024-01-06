@@ -47,6 +47,7 @@ def fwddiff(x,y,k):
             delta = ((-1)**i)*np.math.factorial(k)*y[yn+k-i]/(np.math.factorial(i)*np.math.factorial(k-i))
             df[yn] += delta/(h**k)
     return df
+    
 
 tspline = np.linspace(0,1300,140)
 
@@ -59,8 +60,8 @@ def splines(xn,yn,yprime,x):
     return splined
 
 
-plt.plot(tspline,splines(t,data,fwddiff(t,data,1),tspline))
-plt.plot(t,data)
-plt.show()
+# plt.plot(tspline,splines(t,data,fwddiff(t,data,1),tspline))
+# plt.plot(t,data)
+# plt.show()
 
-print(fwddiff(tspline,splines(t,data,fwddiff(t,data,1),tspline),1)[121])
+# print(fwddiff(tspline,splines(t,data,fwddiff(t,data,1),tspline),1)[121])
