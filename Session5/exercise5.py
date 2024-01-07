@@ -59,7 +59,7 @@ def BwEuler(t0,y0,tend,h):
 # plt.show()
 
 
-# Task C
+# Task C2
 # define a forward euler function to solve a system of ODEs
 def FwEulerN(t0,tend,y0,h):
     t = np.arange(t0,tend+h,h)
@@ -72,8 +72,17 @@ def FwEulerN(t0,tend,y0,h):
 def housemarket(y):
     yn=np.zeros(len(y))
     yn[0]=0.3*y[0]*y[1]-0.8*y[0]
-    yn[1]=2.2*y[1]-y[0]*y[1]
+    yn[1]=1.1*y[1]-y[0]*y[1]
     return yn
 
+# initial conditions
+# incon = np.array([0.8,7])
+# t,y = FwEulerN(0,40,incon,0.005)
+# print(y[3999])
+# plt.plot(t,y[:,0],label='House Price')
+# plt.plot(t,y[:,1],label='Houses Sold')
+# plt.legend()
+# plt.show()
 
 
+# Task D1
