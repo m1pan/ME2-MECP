@@ -2,7 +2,7 @@ import numpy as np
 import matplotlib.pyplot as plt
 
 
-# Task A
+# Task A and B
 # define a differential equation
 def func(y,t):
     return -2*y*t-3*t**3
@@ -61,12 +61,12 @@ def BwEuler(t0,y0,tend,h):
 
 # Task C2
 # define a forward euler function to solve a system of ODEs
-def FwEulerN(t0,tend,y0,h):
+def FwEulerN(t0,tend,y0,h,func):
     t = np.arange(t0,tend+h,h)
     y = np.zeros((len(t),len(y0)))
     y[0] = y0
     for i in range(len(t)-1):
-        y[i+1] = y[i] + h*housemarket(y[i])
+        y[i+1] = y[i] + h*func(y[i])
     return t,y
 
 def housemarket(y):
@@ -77,7 +77,7 @@ def housemarket(y):
 
 # initial conditions
 # incon = np.array([0.8,7])
-# t,y = FwEulerN(0,40,incon,0.005)
+# t,y = FwEulerN(0,40,incon,0.005,housemarket)
 # print(y[3999])
 # plt.plot(t,y[:,0],label='House Price')
 # plt.plot(t,y[:,1],label='Houses Sold')
