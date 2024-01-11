@@ -34,5 +34,9 @@ def TaskA():
     plt.show()
     return 0
 
+
+def TaskB():
+    return 0
+
 if __name__ == '__main__':
-    TaskA()
+    
