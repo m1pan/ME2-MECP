@@ -59,6 +59,9 @@ def TaskA():
     # plt.show()
     return 0
 
+
+
+
 def TaskC():
     # Task C2
     # define a forward euler function to solve a system of ODEs
@@ -69,7 +72,7 @@ def TaskC():
         for i in range(len(t)-1):
             y[i+1] = y[i] + h*func(y[i])
         return t,y
-
+    
     def housemarket(y):
         yn=np.zeros(len(y))
         yn[0]=0.3*y[0]*y[1]-0.8*y[0]
@@ -87,7 +90,58 @@ def TaskC():
     return 0
 
 
-# Task D1
+
 def TaskD():
-    def pendulum(y,t):
-        a
+    # Task D1
+    # ODE describing damped non linear motion of a pendulum
+    def pendulum(y,c,g,l,m):
+        yn = np.zeros(len(y))
+        yn[0] = y[1]
+        yn[1] = -(c/m)*y[1]-(g/l)*np.sin(y[0])
+        return yn
+    # define a forward euler function to solve a system of ODEs
+    def FwEulerN(t0,tend,y0,h):
+        t = np.arange(t0,tend+h,h)
+        y = np.zeros((len(t),len(y0)))
+        y[0] = y0
+        for i in range(len(t)-1):
+            y[i+1] = y[i] + h*pendulum(y[i],0.05,9.81,1,0.5)
+        return t,y
+    
+    # t,y = FwEulerN(0,4,np.array([np.pi/4,0]),0.0005)
+    # print(y[-1,1])
+    # plt.plot(t,y[:,0],label='Angle')
+    # plt.plot(t,y[:,1],label='Angular Velocity')
+    # plt.legend()
+    # plt.show()
+
+    # Task D3
+
+    g=9.81
+    # ODE describing motion of double pendulum, takes y = [theta1, omega1, theta2, omega2]
+    # returns yn = [omega1, alpha1, omega2, alpha2]
+    def doubpendulum(y,L1,L2,m1,m2):
+        yn = np.zeros(len(y))
+        yn[0]=y[1]
+        yn[2]=y[3]
+        yn[1]=(m2*g*np.sin(y[2])*np.cos(y[0]-y[2])-m2*np.sin(y[0]-y[2])*(L1*y[1]**2*np.cos(y[0]-y[2])+L2*y[3]**2)-(m1+m2)*g*np.sin(y[0]))/(L1*(m1+m2*np.sin(y[0]-y[2])**2))
+        yn[3]=((m1+m2)*(L1*y[1]**2*np.sin(y[0]-y[2])-g*np.sin(y[2])+g*np.sin(y[0])*np.cos(y[0]-y[2]))+m2*L2*y[3]**2*np.sin(y[0]-y[2])*np.cos(y[0]-y[2]))/(L2*(m1+m2*np.sin(y[0]-y[2])**2))
+        return yn
+    
+    def FwEulerN_doub(t0,tend,y0,h):
+        t = np.arange(t0,tend+h,h)
+        y = np.zeros((len(t),len(y0)))
+        y[0] = y0
+        for i in range(len(t)-1):
+            y[i+1] = y[i] + h*doubpendulum(y[i],1,0.5,1,1)
+        return t,y
+    t,y = FwEulerN_doub(0,4,np.array([np.pi/4,0,-np.pi/4,0]),0.0002)
+    print(y[-1,3])
+    plt.plot(t,y[:,1],label='Angular Velocity 1')
+    plt.plot(t,y[:,3],label='Angular Velocity 2')
+    plt.legend()
+    plt.show()
+    return 0
+
+if __name__ == "__main__":
+    TaskD()
