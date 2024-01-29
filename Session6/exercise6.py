@@ -111,5 +111,8 @@ def TaskC():
     print(x[40],y[40])
     plt.plot(x,y)
     plt.show()
+
+def TaskD():
+    
 if __name__ == '__main__':
     TaskC()
