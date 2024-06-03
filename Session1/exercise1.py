@@ -11,7 +11,7 @@ x = np.concatenate((a,b,c))
 
 f = np.sin(x)
 print(f[21])
-plt.scatter(x,f)
+# plt.scatter(x,f)
 
 #Task B
 x = np.linspace(-2*np.pi, 2*np.pi, 41)
@@ -40,5 +40,17 @@ ax = plt.axes(projection='3d')
 
 t = np.arange(0,10.05,0.05)
 r = f * np.exp(-0.5*t[100])
-plt.contour(Xg,Yg,r)
+# plt.contour(Xg,Yg,r)
+# plt.show()
+
+#Task D
+x = np.arange(-5,5.1,0.1)
+y = np.arange(-5,5.1,0.1)
+X,Y = np.meshgrid(x,y)
+f1x = X
+f1y = Y
+f1x = Y
+f1y = -X
+plt.quiver(X,Y,f1x,f1y)
+# plt.streamplot(X,Y,f1x,f1y)
 plt.show()
