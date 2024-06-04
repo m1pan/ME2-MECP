@@ -562,35 +562,27 @@ def heat_conduction_2d_potato(
                 )
     return x_range, y_range, t_range, T
 
-def dft(yn: list | np.ndarray) -> np.ndarray:
-    """Discrete Fourier Transform on a set of values yn
-
-    Args:
-        yn (list | np.ndarray): values
-
-    Returns:
-        np.ndarray: DFT values
-    """
+def DFT(yn):
+    '''Discrete Fourier Transform, receives a set of numerical values yn
+    and return the Discrete Fourier Transform of the input, FT'''
+    """ only consider half the resulting spectrum, f < 1/2dt """
     N = len(yn)
-    k = np.arange(N)
-    FT = np.sum(
-        [yn * np.exp(-1j * 2 * np.pi * k * n / N) for n in range(N)], axis=1
-    )
+    FT = np.zeros(N,dtype=complex)
+    for k in range(N):
+        for n in range(N):
+            FT[k] += yn[n]*np.exp(-2j*np.pi*k*n/N)
     return FT
 
-
-def dft_inv(FT: list | np.ndarray) -> np.ndarray:
-    """Inverse Discrete Fourier Transform on a set of values FT"""
+def DFTInv(FT):
+    '''Inverse Discrete Fourier Transform, receives a set of numerical values FT
+    and return the Inverse Discrete Fourier Transform of the input, yn'''
     N = len(FT)
-    n = np.arange(N)
-    yn = (
-        np.sum(
-            [FT * np.exp(1j * 2 * np.pi * k * n / N) for k in range(N)],
-            axis=1,
-        )
-        / N
-    )
+    yn = np.zeros(N,dtype=complex)
+    for n in range(N):
+        for k in range(N):
+            yn[n] += (1/N)*FT[k]*np.exp(2j*np.pi*k*n/N)
     return yn
+
 
 
 def barycentric(
