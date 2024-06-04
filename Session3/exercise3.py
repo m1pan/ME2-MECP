@@ -53,7 +53,7 @@ def NewtDivDiff(xn,yn):
 
 
 def NewtonInterp(xn,yn,x):
-    '''takes known xn,yn and returns interpolated y based on x'''
+    '''takes known arrays xn,yn and returns interpolated array y based on x'''
     order = len(xn)
     length = len(x)
     y = np.empty(length)

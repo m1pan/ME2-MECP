@@ -1,6 +1,16 @@
 from typing import Callable, Optional
 import numpy as np
+import matplotlib.pyplot as plt
 
+# plot surface
+ax = plt.axes(projection='3d')
+ax.plot_surface(Xg,Yg,s)
+ax.plot_wireframe(Xg,Yg,s)
+plt.contour(Xg,Yg,r)
+
+# plot vectors
+plt.quiver(Xg,Yg,f1,f2)
+plt.streamplot(Xg,Yg,f1,f2)
 
 def trapz(x: np.ndarray, y: np.ndarray) -> float:
     """Trapezium integration
@@ -142,6 +152,22 @@ def simpson(h: float, yn: list[float] | np.ndarray) -> float:
         h / 3 * (yn[i] + 4 * yn[i + 1] + yn[i + 2])
         for i in range(0, len(yn) - 2, 2)
     )
+
+#adaptive simpson, takes in function f, lower and upper bounds a and b, desired absolute error e
+#returns the integral value and number of nodes used
+def Simpson2(f,a,b,e):
+    n=2
+    h = (b-a) / n
+    S1 = (h / 3) * (f(a) + 4 * f((a+b)/2) + f(b))
+    while True:
+        n *= 2
+        h = (b-a) / n
+        S2 = S1
+        x = np.linspace(a,b,n+1)
+        S1 = (h/3)*(f(a) + 4*np.sum(f(x[1:-1:2])) + 2*np.sum(f(x[2:-1:2])) + f(b))
+        if (1/15)*np.abs(S1 - S2) < e:
+            break
+    return S1,n+1
 
 
 def factorial(n: int) -> int:
@@ -306,6 +332,7 @@ def fwd_euler(
 
 
 # bwdeuler
+"""rearrrange for y_n+1, proceed from there similar to fwd_euler     """
 
 
 def ode_rk4(
@@ -374,6 +401,7 @@ def fwd_euler_n(
     return t, y
 
 
+
 def ode_bc(
     ode: Callable,
     a: float,
@@ -391,6 +419,7 @@ def ode_bc(
     the coefficients of the boundary conditions:
     r0 dy/dx (a) + r1 y(a) = y_a
     r2 dy/dx (b) + r3 y(b) = y_b
+    where r is 1 or 0 depending on the type of boundary condition.
 
     Args:
         ode (Callable): function with signature ode(x) -> (f, g, p)
@@ -426,7 +455,6 @@ def ode_bc(
     y = np.linalg.solve(A, B)
     return x, y
 
-
 def heat_eqn(
     alpha: float,
     a: float,
@@ -439,7 +467,7 @@ def heat_eqn(
     t_end: float,
 ) -> tuple[np.ndarray, np.ndarray, np.ndarray]:
     """Solve the heat equation using the backward finite difference method
-    to give the form:
+    to give the form: (backwards in time, central in space)
     (T(x, t + dt) - T(x, t)) / dt
         = alpha (T(x + dx, t) - 2 T(x, t) + T(x - dx, t)) / dx^2
     with boundary conditions T(a, t) = Ta, T(b, t) = Tb, and initial
@@ -476,6 +504,63 @@ def heat_eqn(
             )
     return x_range, t_range, T
 
+#2D heat diffusion
+def heat_conduction_2d_potato(
+    alpha_air: float,
+    alpha_potato: float,
+    potato_xlen: float,
+    potato_ylen: float,
+    xa: float,
+    xb: float,
+    ya: float,
+    yb: float,
+    Txa: float,
+    Txb: float,
+    Tya: float,
+    Tyb: float,
+    T0: float,
+    dt: float,
+    dx: float,
+    dy: float,
+    t_end: float,
+) -> tuple[np.ndarray, np.ndarray, np.ndarray, np.ndarray]:
+    x_range = np.arange(xa, xb + dx, dx)
+    y_range = np.arange(ya, yb + dy, dy)
+    t_range = np.arange(0, t_end + dt, dt)
+    alpha = np.zeros((len(x_range), len(y_range)))
+    alpha[:, :] = alpha_air
+    xap = int((xa + xb - potato_xlen) / 2 / dx)
+    xbp = int((xa + xb + potato_xlen) / 2 / dx)
+    yap = int((ya + yb - potato_ylen) / 2 / dy)
+    ybp = int((ya + yb + potato_ylen) / 2 / dy)
+    alpha[xap:xbp, yap:ybp] = alpha_potato
+    T = np.zeros((len(x_range), len(y_range), len(t_range)))
+    T[:, :, 0] = T0
+    T[0, :, :] = Txa
+    T[-1, :, :] = Txb
+    T[:, 0, :] = Tya
+    T[:, -1, :] = Tyb
+    T[xap:xbp, yap:ybp, 0] = -15
+    for i in range(1, len(t_range)):
+        for j in range(1, len(x_range) - 1):
+            for k in range(1, len(y_range) - 1):
+                T[j, k, i] = (
+                    alpha[j, k]
+                    * dt
+                    / dx**2
+                    * (T[j + 1, k, i - 1] + T[j - 1, k, i - 1])
+                    + alpha[j, k]
+                    * dt
+                    / dy**2
+                    * (T[j, k + 1, i - 1] + T[j, k - 1, i - 1])
+                    + (
+                        1
+                        - 2 * alpha[j, k] * dt / dx**2
+                        - 2 * alpha[j, k] * dt / dy**2
+                    )
+                    * T[j, k, i - 1]
+                )
+    return x_range, y_range, t_range, T
 
 def dft(yn: list | np.ndarray) -> np.ndarray:
     """Discrete Fourier Transform on a set of values yn
