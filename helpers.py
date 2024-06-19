@@ -49,7 +49,7 @@ def lagrangian(j: int, xp: float, xn: list[float] | np.ndarray) -> float:
 
     return out
 
-
+# ods
 def lagr_interp(
     xn: list[float] | np.ndarray,
     yn: list[float] | np.ndarray,
